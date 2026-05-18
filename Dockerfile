@@ -5,7 +5,16 @@
 
 FROM php:8.2-fpm-alpine AS base
 
-# Install system dependencies
+# Install system dependencies and build tools
+RUN apk add --no-cache --virtual .build-deps \
+    build-base \
+    autoconf \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    oniguruma-dev \
+    libxml2-dev
+
 RUN apk add --no-cache \
     nginx \
     supervisor \
@@ -15,14 +24,7 @@ RUN apk add --no-cache \
     curl \
     zip \
     unzip \
-    sqlite \
-    build-base \
-    autoconf \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    oniguruma-dev \
-    libxml2-dev
+    sqlite
 
 # Install PHP extensions
 RUN docker-php-ext-install \
@@ -35,8 +37,8 @@ RUN docker-php-ext-install \
     gd \
     opcache
 
-# Clean up build dependencies to reduce image size
-RUN apk del --no-cache build-base autoconf
+# Remove build dependencies to reduce image size
+RUN apk del .build-deps
 
 # Install Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
