@@ -9,6 +9,7 @@ FROM php:8.2-fpm-alpine AS base
 RUN apk add --no-cache --virtual .build-deps \
     build-base \
     autoconf \
+    sqlite-dev \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
@@ -24,7 +25,8 @@ RUN apk add --no-cache \
     curl \
     zip \
     unzip \
-    sqlite
+    sqlite \
+    sqlite-libs
 
 # Install PHP extensions
 RUN docker-php-ext-install \
