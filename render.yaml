@@ -18,6 +18,7 @@ services:
           type: web
           name: libro-especial
           property: host
+          preface: "https://"
       - key: APP_KEY
         generateValue: true
       - key: DB_CONNECTION
@@ -32,3 +33,11 @@ services:
         value: stderr
       - key: LOG_LEVEL
         value: error
+      - key: ASSET_URL
+        fromService:
+          type: web
+          name: libro-especial
+          property: host
+          preface: "https://"
+      - key: TRUSTED_PROXIES
+        value: "*"
