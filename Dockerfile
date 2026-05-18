@@ -15,12 +15,14 @@ RUN apk add --no-cache \
     curl \
     zip \
     unzip \
+    sqlite \
+    build-base \
+    autoconf \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
     oniguruma-dev \
-    libxml2-dev \
-    sqlite
+    libxml2-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install \
@@ -32,6 +34,9 @@ RUN docker-php-ext-install \
     bcmath \
     gd \
     opcache
+
+# Clean up build dependencies to reduce image size
+RUN apk del --no-cache build-base autoconf
 
 # Install Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
